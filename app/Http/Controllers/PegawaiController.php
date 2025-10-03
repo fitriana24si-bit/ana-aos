@@ -32,6 +32,8 @@ class PegawaiController extends Controller
             'tanggal_masuk' => '10 Januari 2022',
             'sejak_berapa_hari' => $sejakBerapaHari,
             'semester' => 3,
+            'pesan' => 'Masih awal kejar tak',
+            'cita-cita' => 'dokter',
             'status' => 'Mahasiswa',
         ];
 

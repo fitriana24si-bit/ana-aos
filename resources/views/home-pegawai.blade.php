@@ -24,6 +24,7 @@
     <p><strong>Sejak Berapa Hari:</strong> {{ $pegawai['sejak_berapa_hari'] }} hari</p>
     <p><strong>Semester:</strong> {{ $pegawai['semester'] }}</p>
     <p><strong>Status:</strong> {{ $pegawai['status'] }}</p>
-
+    <p><strong>pesan:</strong> {{ $pegawai['pesan'] }}</p>
+    <p><strong>cita-cita:</strong> {{ $pegawai['cita-cita'] }}</p>
 </body>
 </html>
