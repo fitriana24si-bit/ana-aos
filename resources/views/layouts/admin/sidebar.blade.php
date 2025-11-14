@@ -129,7 +129,7 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </span>
-                        <span>Upgrade to Pro</span>
+                        <span></span>
                     </a>
                 </li>
             </ul>
