@@ -2,7 +2,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
+use App\Models\MultipleUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
@@ -34,7 +36,6 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
         $data['first_name'] = $request->first_name;
         $data['last_name']  = $request->last_name;
         $data['birthday']   = $request->birthday;
@@ -45,16 +46,15 @@ class PelangganController extends Controller
         Pelanggan::create($data);
 
         return redirect()->route('pelanggan.index')->with('success', 'Penambahan Data Berhasil!');
-
-        dd($data);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Pelanggan $pelanggan)
+    public function show(string $id)
     {
-        //
+        $data['pelanggan'] = Pelanggan::with('files')->findOrFail($id);
+        return view('admin.pelanggan.show', $data);
     }
 
     /**
@@ -62,7 +62,8 @@ class PelangganController extends Controller
      */
     public function edit(string $id)
     {
-        $data['dataPelanggan'] = Pelanggan::findOrFail($id);
+        // PERBAIKAN: Load files relationship dan gunakan variabel 'pelanggan'
+        $data['pelanggan'] = Pelanggan::with('files')->findOrFail($id);
         return view('admin.pelanggan.edit', $data);
     }
 
@@ -82,7 +83,9 @@ class PelangganController extends Controller
         $pelanggan->phone      = $request->phone;
 
         $pelanggan->save();
-        return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil Diupdate!');
+
+        // PERBAIKAN: Redirect ke edit agar bisa lanjut upload file
+        return redirect()->route('pelanggan.edit', $pelanggan->pelanggan_id)->with('success', 'Data Berhasil Diupdate!');
     }
 
     /**
@@ -91,8 +94,70 @@ class PelangganController extends Controller
     public function destroy(string $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+
+        // Hapus semua file terkait pelanggan
+        foreach ($pelanggan->files as $file) {
+            Storage::delete('public/uploads/' . $file->filename);
+            $file->delete();
+        }
+
         $pelanggan->delete();
 
         return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil Dihapus!');
+    }
+
+    /**
+     * Upload multiple files for pelanggan
+     */
+    public function uploadFiles(Request $request, string $id)
+    {
+        $request->validate([
+            'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx,txt|max:2048',
+        ]);
+
+        $pelanggan = Pelanggan::findOrFail($id);
+        $uploadedFiles = [];
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/uploads', $filename);
+
+                $uploadedFile = MultipleUpload::create([
+                    'filename' => $filename,
+                    'original_name' => $file->getClientOriginalName(),
+                    'ref_table' => 'pelanggan',
+                    'ref_id' => $pelanggan->pelanggan_id
+                ]);
+
+                $uploadedFiles[] = $uploadedFile;
+            }
+        }
+
+        $fileCount = count($uploadedFiles);
+        return back()->with('success', "{$fileCount} file berhasil diupload!");
+    }
+
+    /**
+     * Delete specific file for pelanggan
+     */
+    public function deleteFile(string $id, string $fileId)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+
+        $file = MultipleUpload::where('id', $fileId)
+                            ->where('ref_table', 'pelanggan')
+                            ->where('ref_id', $pelanggan->pelanggan_id)
+                            ->firstOrFail();
+
+        $fileName = $file->original_name;
+
+        // Delete physical file
+        Storage::delete('public/uploads/' . $file->filename);
+
+        // Delete database record
+        $file->delete();
+
+        return back()->with('success', "File '{$fileName}' berhasil dihapus!");
     }
 }

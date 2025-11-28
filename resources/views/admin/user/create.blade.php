@@ -23,63 +23,87 @@
                 <p class="mb-0">Form untuk menambahkan data user baru.</p>
             </div>
             <div>
-                <a href="{{ route('user.index') }}" class="btn btn-primary"><i class="far fa-question-circle me-1"></i>
-                    Kembali</a>
+                <a href="{{ route('user.index') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
             </div>
         </div>
     </div>
-
 
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <div class="card-body">
-                    <form action="{{ route('user.store') }}" method="POST">
+                    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-4">
-                            <div class="col-lg-4 col-sm-6">
-                                <!-- First Name -->
+                            <div class="col-lg-6 col-sm-12">
+                                <!-- Profile Picture -->
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nama Lengkap</label>
-                                    <input type="name" name ="name" id="name" class="form-control" required>
+                                    <label for="profile_picture" class="form-label">Foto Profil</label>
+                                    <input type="file" name="profile_picture" id="profile_picture"
+                                           class="form-control @error('profile_picture') is-invalid @enderror"
+                                           accept="image/*">
+                                    @error('profile_picture')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="form-text">Format: JPG, PNG, GIF. Maksimal: 2MB</div>
                                 </div>
 
+                                <!-- Name -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nama Lengkap</label>
+                                    <input type="text" name="name" id="name"
+                                           class="form-control @error('name') is-invalid @enderror"
+                                           value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
                                 <!-- Email -->
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email"  class="form-control" required>
+                                    <input type="email" name="email" id="email"
+                                           class="form-control @error('email') is-invalid @enderror"
+                                           value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
-
-                            <div class="col-lg-4 col-sm-12">
+                            <div class="col-lg-6 col-sm-12">
                                 <!-- Password -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <input type="password" name="password" id="password" class="form-control" required>
+                                    <input type="password" name="password" id="password"
+                                           class="form-control @error('password') is-invalid @enderror" required>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-
 
                                 <!-- Confirmation Password -->
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">Confirm Password</label>
-                                    <input type="password" name="password_confirmation" id="password_confirmation"  class="form-control">
+                                    <input type="password" name="password_confirmation" id="password_confirmation"
+                                           class="form-control" required>
                                 </div>
 
-
                                 <!-- Buttons -->
-                                <div class="">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <a href="{{ route('user.index') }}"
-                                        class="btn btn-outline-secondary ms-2">Batal</a>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i> Simpan
+                                    </button>
+                                    <a href="{{ route('user.index') }}" class="btn btn-outline-secondary ms-2">
+                                        <i class="fas fa-times me-1"></i> Batal
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
-
-
             </div>
         </div>
     </div>
