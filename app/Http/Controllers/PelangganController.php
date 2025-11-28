@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan;
 use App\Models\MultipleUpload;
+use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,12 +13,12 @@ class PelangganController extends Controller
      */
     public function index(Request $request)
     {
-        $filterableColumns = ['gender'];
-        $searchableColumns = ['first_name', 'last_name', 'email', 'phone'];
-        $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns )
-        ->search($request, $searchableColumns)
-        ->paginate(10)
-        ->onEachSide(2);
+        $filterableColumns     = ['gender'];
+        $searchableColumns     = ['first_name', 'last_name', 'email', 'phone'];
+        $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10)
+            ->onEachSide(2);
 
         return view('admin.pelanggan.index', $data);
     }
@@ -73,7 +73,7 @@ class PelangganController extends Controller
     public function update(Request $request, string $id)
     {
         $pelanggan_id = $id;
-        $pelanggan = Pelanggan::findOrFail($pelanggan_id);
+        $pelanggan    = Pelanggan::findOrFail($pelanggan_id);
 
         $pelanggan->first_name = $request->first_name;
         $pelanggan->last_name  = $request->last_name;
@@ -115,7 +115,7 @@ class PelangganController extends Controller
             'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx,txt|max:2048',
         ]);
 
-        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan     = Pelanggan::findOrFail($id);
         $uploadedFiles = [];
 
         if ($request->hasFile('files')) {
@@ -124,10 +124,10 @@ class PelangganController extends Controller
                 $file->storeAs('public/uploads', $filename);
 
                 $uploadedFile = MultipleUpload::create([
-                    'filename' => $filename,
+                    'filename'      => $filename,
                     'original_name' => $file->getClientOriginalName(),
-                    'ref_table' => 'pelanggan',
-                    'ref_id' => $pelanggan->pelanggan_id
+                    'ref_table'     => 'pelanggan',
+                    'ref_id'        => $pelanggan->pelanggan_id,
                 ]);
 
                 $uploadedFiles[] = $uploadedFile;
@@ -146,9 +146,9 @@ class PelangganController extends Controller
         $pelanggan = Pelanggan::findOrFail($id);
 
         $file = MultipleUpload::where('id', $fileId)
-                            ->where('ref_table', 'pelanggan')
-                            ->where('ref_id', $pelanggan->pelanggan_id)
-                            ->firstOrFail();
+            ->where('ref_table', 'pelanggan')
+            ->where('ref_id', $pelanggan->pelanggan_id)
+            ->firstOrFail();
 
         $fileName = $file->original_name;
 

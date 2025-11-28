@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +14,7 @@ class MultipleUpload extends Model
         'filename',
         'original_name',
         'ref_table',
-        'ref_id'
+        'ref_id',
     ];
 
     public function getFileUrlAttribute()
@@ -26,7 +25,7 @@ class MultipleUpload extends Model
     public function getIsImageAttribute()
     {
         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
-        $extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        $extension       = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
         return in_array($extension, $imageExtensions);
     }
 
