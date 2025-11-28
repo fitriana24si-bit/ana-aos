@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 
-class PegawaiController extends Controller
-{
     //
-=======
 use Carbon\Carbon;
 
 class PegawaiController extends Controller
@@ -99,5 +95,5 @@ class PegawaiController extends Controller
     {
         //
     }
->>>>>>> ab97156d028ad89f4243fbe24448744dca2dc85f
+
 }
