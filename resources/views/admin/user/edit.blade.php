@@ -15,9 +15,10 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item"><a href="#">User</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                <li class="breadcrumb-item active">Edit User</li>
             </ol>
         </nav>
+
         <div class="d-flex justify-content-between w-100 flex-wrap">
             <div class="mb-3 mb-lg-0">
                 <h1 class="h4">Edit User</h1>
@@ -35,87 +36,91 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <div class="card-body">
+
                     <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
                         <div class="row mb-4">
+
+                            <!-- KIRI -->
                             <div class="col-lg-6 col-sm-12">
-                                <!-- Current Profile Picture -->
+
                                 <div class="mb-4 text-center">
-                                    <img src="{{ $user->profile_picture_url }}" alt="Current Profile"
-                                        class="rounded-circle shadow mb-3" width="120" height="120"
-                                        style="object-fit: cover;">
+                                    <img src="{{ $user->profile_picture_url }}" width="120" height="120"
+                                        class="rounded-circle shadow mb-3" style="object-fit: cover;">
                                     <br>
                                     <small class="text-muted">Foto Profil Saat Ini</small>
                                 </div>
 
-                                <!-- Profile Picture Upload -->
                                 <div class="mb-3">
-                                    <label for="profile_picture" class="form-label">Ganti Foto Profil</label>
-                                    <input type="file" name="profile_picture" id="profile_picture"
+                                    <label class="form-label">Ganti Foto Profil</label>
+                                    <input type="file" name="profile_picture"
                                         class="form-control @error('profile_picture') is-invalid @enderror"
                                         accept="image/*">
                                     @error('profile_picture')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="form-text">Kosongkan jika tidak ingin mengganti foto</div>
                                 </div>
+
                             </div>
 
+                            <!-- KANAN -->
                             <div class="col-lg-6 col-sm-12">
-                                <!-- Name -->
+
+                                <!-- Role -->
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nama Lengkap</label>
-                                    <input type="text" name="name" id="name"
-                                        class="form-control @error('name') is-invalid @enderror"
-                                        value="{{ old('name', $user->name) }}" required>
-                                    @error('name')
+                                    <label class="form-label">Role User</label>
+                                    <select name="role" class="form-select @error('role') is-invalid @enderror">
+                                        <option value="pelanggan" {{ $user->role == 'pelanggan' ? 'selected' : '' }}>Pelanggan
+                                        </option>
+                                        <option value="mitra" {{ $user->role == 'mitra' ? 'selected' : '' }}>Mitra</option>
+                                        <option value="superadmin" {{ $user->role == 'superadmin' ? 'selected' : '' }}>Super
+                                            Admin</option>
+                                    </select>
+
+                                    @error('role')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <!-- Nama -->
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Lengkap</label>
+                                    <input type="text" class="form-control" name="name"
+                                        value="{{ old('name', $user->name) }}" required>
                                 </div>
 
                                 <!-- Email -->
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" name="email" id="email"
-                                        class="form-control @error('email') is-invalid @enderror"
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email"
                                         value="{{ old('email', $user->email) }}" required>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
 
                                 <!-- Password -->
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Password Baru</label>
-                                    <input type="password" name="password" id="password"
-                                        class="form-control @error('password') is-invalid @enderror">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Kosongkan jika tidak ingin mengganti password</div>
+                                    <label class="form-label">Password Baru</label>
+                                    <input type="password" name="password" class="form-control">
+                                    <div class="form-text">Kosongkan jika tidak ingin mengganti</div>
                                 </div>
 
-                                <!-- Password Confirmation -->
+                                <!-- Confirm -->
                                 <div class="mb-3">
-                                    <label for="password_confirmation" class="form-label">Konfirmasi Password Baru</label>
-                                    <input type="password" name="password_confirmation" id="password_confirmation"
-                                        class="form-control">
+                                    <label class="form-label">Konfirmasi Password</label>
+                                    <input type="password" name="password_confirmation" class="form-control">
                                 </div>
 
-                                <!-- Buttons -->
                                 <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-1"></i> Update User
-                                    </button>
-                                    <a href="{{ route('user.index') }}" class="btn btn-outline-secondary ms-2">
-                                        <i class="fas fa-times me-1"></i> Batal
-                                    </a>
+                                    <button class="btn btn-primary">Update User</button>
+                                    <a href="{{ route('user.index') }}" class="btn btn-outline-secondary ms-2">Batal</a>
                                 </div>
+
                             </div>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>

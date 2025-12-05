@@ -22,6 +22,9 @@
              </div>
              <!-- Navbar links -->
              <ul class="navbar-nav align-items-center">
+                @if (Auth::check())
+
+
                  <li class="nav-item dropdown">
                      <a class="nav-link text-dark notification-bell unread dropdown-toggle"
                          data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown"
@@ -111,7 +114,8 @@
                                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                          clip-rule="evenodd"></path>
                                  </svg>
-                                 View all
+                                 // Ambil di view
+                                 {{ session('last_login') }}
                              </a>
                          </div>
                      </div>
@@ -123,7 +127,7 @@
                              <img class="avatar rounded-circle" alt="Image placeholder"
                                  src="{{ asset('assets-admin/img/team/profile-picture-3.jpg') }}">
                              <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                                 <span class="mb-0 font-small fw-bold text-gray-900">Bonnie Green</span>
+                                 <span class="mb-0 font-small fw-bold text-gray-900">{{ Auth::user()->name }}</span>
                              </div>
                          </div>
                      </a>
@@ -146,8 +150,18 @@
                              </svg>
                              Settings
                          </a>
+
+                          <a class="dropdown-item d-flex align-items-center" href="">
+                             <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                 <path fill-rule="evenodd"
+                                     d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                                     clip-rule="evenodd"></path>
+                             </svg>
+                           {{session('last_login')}}
+                         </a>
                          <div role="separator" class="dropdown-divider my-1"></div>
-                         <a class="dropdown-item d-flex align-items-center" href="#">
+                         <a class="dropdown-item d-flex align-items-center" href="{{route('auth.logout')}}">
                              <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor"
                                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -158,6 +172,9 @@
                          </a>
                      </div>
                  </li>
+                 @else
+                 <a class="btn btn-primary" href="{{route('auth.login')}}">Login</a>
+                    @endif
              </ul>
          </div>
      </div>

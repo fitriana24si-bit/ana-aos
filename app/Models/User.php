@@ -13,7 +13,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile_picture', // TAMBAHKAN INI
+        'profile_picture',
+        'role',
     ];
 
     protected $hidden = [
@@ -29,7 +30,6 @@ class User extends Authenticatable
         ];
     }
 
-    // TAMBAHKAN METHOD INI UNTUK URL PROFILE PICTURE
     public function getProfilePictureUrlAttribute()
     {
         if ($this->profile_picture) {

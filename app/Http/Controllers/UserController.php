@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage; // JANGAN LUPA IMPORT INI
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $data['dataUser'] = User::paginate(10); // UBAH KE PAGINATION
+        $data['dataUser'] = User::paginate(10);
         return view('admin.user.index', $data);
     }
 
@@ -23,15 +23,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'name'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users',
+            'password'        => 'required|min:6|confirmed',
+            'role'            => 'required|in:pelanggan,mitra,superadmin', // <<< FIXED
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
 
-        // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
             $image = $request->file('profile_picture');
             $imageName = time() . '_' . $image->getClientOriginalName();
@@ -57,17 +57,16 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:6|confirmed',
+            'name'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users,email,' . $id,
+            'password'        => 'nullable|min:6|confirmed',
+            'role'            => 'required|in:pelanggan,mitra,superadmin', // <<< FIXED
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
 
-        // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
-            // Delete old profile picture if exists
             if ($user->profile_picture) {
                 Storage::delete('public/profile_pictures/' . $user->profile_picture);
             }
@@ -78,7 +77,6 @@ class UserController extends Controller
             $data['profile_picture'] = $imageName;
         }
 
-        // Handle password
         if ($request->filled('password')) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -94,7 +92,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Delete profile picture if exists
         if ($user->profile_picture) {
             Storage::delete('public/profile_pictures/' . $user->profile_picture);
         }

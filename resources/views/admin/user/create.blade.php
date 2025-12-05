@@ -17,6 +17,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Tambah User</li>
             </ol>
         </nav>
+
         <div class="d-flex justify-content-between w-100 flex-wrap">
             <div class="mb-3 mb-lg-0">
                 <h1 class="h4">Tambah User</h1>
@@ -36,9 +37,13 @@
                 <div class="card-body">
                     <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+
                         <div class="row mb-4">
+
+                            <!-- KIRI -->
                             <div class="col-lg-6 col-sm-12">
-                                <!-- Profile Picture -->
+
+                                <!-- Foto -->
                                 <div class="mb-3">
                                     <label for="profile_picture" class="form-label">Foto Profil</label>
                                     <input type="file" name="profile_picture" id="profile_picture"
@@ -47,10 +52,10 @@
                                     @error('profile_picture')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="form-text">Format: JPG, PNG, GIF. Maksimal: 2MB</div>
+                                    <div class="form-text">Format JPG/PNG. Max 2MB</div>
                                 </div>
 
-                                <!-- Name -->
+                                <!-- Nama -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nama Lengkap</label>
                                     <input type="text" name="name" id="name"
@@ -73,7 +78,22 @@
                                 </div>
                             </div>
 
+                            <!-- KANAN -->
                             <div class="col-lg-6 col-sm-12">
+
+                                <!-- ROLE BARU -->
+                                <div class="mb-3">
+                                    <label class="form-label">Role User</label>
+                                    <select name="role" class="form-select @error('role') is-invalid @enderror" required>
+                                        <option value="pelanggan">Pelanggan</option>
+                                        <option value="mitra">Mitra</option>
+                                        <option value="superadmin">Super Admin</option>
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Password -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
@@ -84,24 +104,24 @@
                                     @enderror
                                 </div>
 
-                                <!-- Confirmation Password -->
+                                <!-- Confirm -->
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">Confirm Password</label>
                                     <input type="password" name="password_confirmation" id="password_confirmation"
                                         class="form-control" required>
                                 </div>
 
-                                <!-- Buttons -->
+                                <!-- Tombol -->
                                 <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-1"></i> Simpan
-                                    </button>
+                                    <button class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan</button>
                                     <a href="{{ route('user.index') }}" class="btn btn-outline-secondary ms-2">
                                         <i class="fas fa-times me-1"></i> Batal
                                     </a>
                                 </div>
+
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
